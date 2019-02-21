@@ -5,6 +5,7 @@ import (
     "os"
     "os/signal"
     "syscall"
+    "strings"
     "github.com/confluentinc/confluent-kafka-go/kafka"
 )
 
@@ -13,10 +14,6 @@ var consumer *kafka.Consumer
 func Consume(topics string, message string) error {
     sigchan := make(chan os.Signal, 1)
     signal.Notify(sigchan, syscall.SIGINT, syscall.SIGTERM)
-
-    brokers := os.Getenv("BROKERS") // localhost:29092
-    topic := os.Getenv("TOPIC") // heroku_logs
-    group := os.Getenv("GROUP") // myGroup
 
     var err error
     c, err := kafka.NewConsumer(&kafka.ConfigMap{
