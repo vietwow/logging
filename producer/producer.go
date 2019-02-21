@@ -9,11 +9,9 @@ import (
 
 var p *kafka.Producer
 
-func InitKafka() error {
-    brokers := os.Getenv("BROKERS") // localhost:29092
-
+func InitKafka(broker string) error {
     var err error
-    p, err = kafka.NewProducer(&kafka.ConfigMap{"bootstrap.servers": brokers})
+    p, err = kafka.NewProducer(&kafka.ConfigMap{"bootstrap.servers": broker})
     return err
 }
 

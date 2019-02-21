@@ -11,8 +11,7 @@ import (
 
 var c *kafka.Consumer
 
-func InitKafka() error {
-    broker := os.Getenv("BROKERS") // localhost:29092
+func InitKafka(broker string) error {
     group := os.Getenv("GROUP") // myGroup
 
     var err error
