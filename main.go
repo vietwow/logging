@@ -2,28 +2,33 @@ package main
 
 import (
     "fmt"
+
     "github.com/confluentinc/confluent-kafka-go/kafka"
-    "github.com/vietwow/logging/producer"
-    "github.com/vietwow/logging/consumer"
 )
 
 func main() {
-    // brokers := os.Getenv("BROKERS") // localhost:29092
-    // topic := os.Getenv("TOPIC") // heroku_logs
-    // group := os.Getenv("GROUP") // myGroup
 
-    // Initialize kafka producer
-    err = producer.InitKafka()
+    c, err := kafka.NewConsumer(&kafka.ConfigMap{
+        "bootstrap.servers": "localhost",
+        "group.id":          "myGroup",
+        "auto.offset.reset": "earliest",
+    })
+
     if err != nil {
-        log.Fatal("Kafka producer ERROR: ", err)
+        panic(err)
     }
 
-    producerErr := producer.Produce(topics, string(messageJson))
-    if producerErr != nil {
-        log.Print(err)
-    } else {
-        messageResponse := fmt.Sprintf("Produced [%s] successfully", string(messageJson))
-        fmt.Println(messageResponse)
+    c.SubscribeTopics([]string{"myTopic", "^aRegex.*[Tt]opic"}, nil)
+
+    for {
+        msg, err := c.ReadMessage(-1)
+        if err == nil {
+            fmt.Printf("Message on %s: %s\n", msg.TopicPartition, string(msg.Value))
+        } else {
+            // The client will automatically try to recover from all errors.
+            fmt.Printf("Consumer error: %v (%v)\n", err, msg)
+        }
     }
 
+    c.Close()
 }
