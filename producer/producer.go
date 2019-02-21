@@ -9,16 +9,16 @@ import (
 
 var producer *kafka.Producer
 
+func InitKafka() error {
+    brokers := os.Getenv("BROKERS") // localhost:29092
+    topic := os.Getenv("TOPIC") // heroku_logs
+
+    var err error
+    p, err = kafka.NewProducer(&kafka.ConfigMap{"bootstrap.servers": brokers})
+    return err
+}
+
 func Produce(topics string, message string) error {
-	p, err := kafka.NewProducer(&kafka.ConfigMap{"bootstrap.servers": broker})
-
-	if err != nil {
-		fmt.Printf("Failed to create producer: %s\n", err)
-		os.Exit(1)
-	}
-
-	fmt.Printf("Created Producer %v\n", p)
-
 	doneChan := make(chan bool)
 
 	go func() {
