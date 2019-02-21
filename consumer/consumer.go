@@ -26,17 +26,17 @@ func InitKafka(broker string) error {
     return err
 }
 
-func Consume(topics string) {
+func Consume(topic string) {
     fmt.Printf("Created Consumer %v\n", c)
     sigchan := make(chan os.Signal, 1)
     signal.Notify(sigchan, syscall.SIGINT, syscall.SIGTERM)
 
-    err := c.SubscribeTopics(strings.Fields(topics), nil)
+    err := c.SubscribeTopics(strings.Fields(topic), nil)
     if err != nil {
-        fmt.Println("Unable to subscribe to topic " + topics + " due to error - " + err.Error())
+        fmt.Println("Unable to subscribe to topic " + topic + " due to error - " + err.Error())
         os.Exit(1)
     } else {
-        fmt.Println("subscribed to topic ", topics)
+        fmt.Println("subscribed to topic ", topic)
     }
 
     run := true

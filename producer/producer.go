@@ -15,7 +15,7 @@ func InitKafka(broker string) error {
     return err
 }
 
-func Produce(topics string, message string) {
+func Produce(topic string, message string) {
     fmt.Printf("Created Producer %v\n", p)
 
     doneChan := make(chan bool)
