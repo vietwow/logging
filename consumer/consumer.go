@@ -4,8 +4,6 @@ import (
     "fmt"
     "os"
     "os/signal"
-    // "strings"
-    // "context"
     "github.com/confluentinc/confluent-kafka-go/kafka"
 )
 
@@ -31,7 +29,7 @@ func Consume(topic string) {
     sigchan := make(chan os.Signal, 1)
     signal.Notify(sigchan, os.Interrupt)
 
-    err := c.SubscribeTopics(topic, nil)
+    err := c.SubscribeTopics([]string{topic}, nil)
     if err != nil {
         fmt.Println("Unable to subscribe to topic " + topic + " due to error - " + err.Error())
         os.Exit(1)
