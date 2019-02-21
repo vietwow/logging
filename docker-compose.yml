@@ -47,5 +47,5 @@ services:
       - kafka
     environment:
       BROKER: kafka:29092
-      TOPIC: heroku_logs
+      TOPIC: newhacker
       GROUP: myGroup
