@@ -43,7 +43,6 @@ func Consume(topic string) {
         fmt.Printf("Message on %s: %s\n", msg.TopicPartition, string(msg.Value))
     } else {
         fmt.Printf("Consumer error: %v (%v)\n", err, msg)
-        break
     }
     // run := true
 
