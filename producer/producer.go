@@ -23,7 +23,7 @@ func Produce(topic string, message string) {
     deliveryChan := make(chan kafka.Event)
 
     value := "Hello Go!"
-    err = p.Produce(&kafka.Message{
+    err := p.Produce(&kafka.Message{
         TopicPartition: kafka.TopicPartition{Topic: &topic, Partition: kafka.PartitionAny},
         Value:          []byte(value),
         Headers:        []kafka.Header{{Key: "myTestHeader", Value: []byte("header values are binary")}},
