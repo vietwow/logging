@@ -4,7 +4,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/QuoineFinancial/devops-redis-slowlog-to-sumologic/slowlog"
 	"github.com/stretchr/testify/assert"
 )
 
