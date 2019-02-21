@@ -28,11 +28,8 @@ func InitKafka(broker string) error {
 func Consume(topic string) {
     fmt.Printf("=> Created Consumer %v\n", c)
 
-    ctx, cancel := context.WithCancel(context.Background())
-    defer cancel()
-
-    signals := make(chan os.Signal, 1)
-    signal.Notify(signals, os.Interrupt)
+    sigchan := make(chan os.Signal, 1)
+    signal.Notify(sigchan, os.Interrupt)
 
     err := c.SubscribeTopics([]string{topic, "^aRegex.*[Tt]opic"}, nil)
     if err != nil {
