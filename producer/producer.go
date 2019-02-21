@@ -10,13 +10,13 @@ var p *kafka.Producer
 
 func InitKafka(broker string) error {
     var err error
-    fmt.Println("Creating producer to broker :", broker)
+    fmt.Printf("Creating consumer to broker %v\n", broker)
     p, err = kafka.NewProducer(&kafka.ConfigMap{"bootstrap.servers": broker})
     return err
 }
 
 func Produce(topic string, message string) {
-    fmt.Printf("Created Producer %v\n", p)
+    fmt.Printf("=> Created Producer %v\n", p)
 
     doneChan := make(chan bool)
 

@@ -14,7 +14,7 @@ var c *kafka.Consumer
 func InitKafka(broker string) error {
     group := os.Getenv("GROUP") // myGroup
 
-    fmt.Println("Creating consumer to broker ", broker)
+    fmt.Printf("Creating consumer to broker %v with group %v\n", broker, group)
 
     var err error
     c, err = kafka.NewConsumer(&kafka.ConfigMap{
@@ -27,7 +27,7 @@ func InitKafka(broker string) error {
 }
 
 func Consume(topic string) {
-    fmt.Printf("Created Consumer %v\n", c)
+    fmt.Printf("=> Created Consumer %v\n", c)
     sigchan := make(chan os.Signal, 1)
     signal.Notify(sigchan, syscall.SIGINT, syscall.SIGTERM)
 
