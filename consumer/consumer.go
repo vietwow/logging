@@ -24,7 +24,7 @@ func InitKafka(broker string) error {
     return err
 }
 
-func Consume(topics string, message string) {
+func Consume(topics string) {
     sigchan := make(chan os.Signal, 1)
     signal.Notify(sigchan, syscall.SIGINT, syscall.SIGTERM)
 
