@@ -36,7 +36,7 @@ func Consume(topic string) {
         fmt.Println("Unable to subscribe to topic " + topic + " due to error - " + err.Error())
         os.Exit(1)
     } else {
-        fmt.Println("subscribed to topic ", topic)
+        fmt.Println("subscribed to topic :", topic)
     }
 
     run := true
@@ -46,24 +46,23 @@ func Consume(topic string) {
         case sig := <-sigchan:
             fmt.Printf("Caught signal %v: terminating\n", sig)
             run = false
-        default:
-            ev := c.Poll(100)
-            if ev == nil {
-                continue
-            }
 
+        case ev := <-c.Events():
             switch e := ev.(type) {
+            case kafka.AssignedPartitions:
+                fmt.Fprintf(os.Stderr, "%% %v\n", e)
+                c.Assign(e.Partitions)
+            case kafka.RevokedPartitions:
+                fmt.Fprintf(os.Stderr, "%% %v\n", e)
+                c.Unassign()
             case *kafka.Message:
                 fmt.Printf("%% Message on %s:\n%s\n",
                     e.TopicPartition, string(e.Value))
-                if e.Headers != nil {
-                    fmt.Printf("%% Headers: %v\n", e.Headers)
-                }
+            case kafka.PartitionEOF:
+                fmt.Printf("%% Reached %v\n", e)
             case kafka.Error:
                 // Errors should generally be considered as informational, the client will try to automatically recover
                 fmt.Fprintf(os.Stderr, "%% Error: %v\n", e)
-            default:
-                fmt.Printf("Ignored %v\n", e)
             }
         }
     }
