@@ -6,7 +6,7 @@ import (
     "github.com/vietwow/logging/consumer"
     "github.com/vietwow/logging/producer"
     "log"
-    "string"
+    "strings"
 )
 
 func main() {
