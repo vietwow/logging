@@ -6,8 +6,13 @@ import (
     "github.com/vietwow/logging/consumer"
     "github.com/vietwow/logging/producer"
     "log"
-    "strings"
+    // "strings"
 )
+
+type producedMessage struct {
+    Id string      `json:"id"`
+    Message string `json:"message"`
+}
 
 func main() {
     // brokers := os.Getenv("BROKERS") // localhost:29092
@@ -21,9 +26,12 @@ func main() {
         os.Exit(1)
     }
 
-    fmt.Printf("Created Producer %v\n", p)
+    messageJson, _ := json.Marshal(&producedMessage{
+        Id: message.ID,
+        Message: message.Text,
+    })
 
-    producerErr := producer.Produce(strings.Fields(topic), string(messageJson))
+    producerErr := producer.Produce(topic, string(messageJson))
     if producerErr != nil {
         log.Print(err)
     } else {
