@@ -7,14 +7,14 @@ import (
     "github.com/confluentinc/confluent-kafka-go/kafka"
 )
 
-var producer *kafka.Producer
+var p *kafka.Producer
 
 func InitKafka() error {
     brokers := os.Getenv("BROKERS") // localhost:29092
     topic := os.Getenv("TOPIC") // heroku_logs
 
     var err error
-    p, err := kafka.NewProducer(&kafka.ConfigMap{"bootstrap.servers": brokers})
+    p, err = kafka.NewProducer(&kafka.ConfigMap{"bootstrap.servers": brokers})
     return err
 }
 

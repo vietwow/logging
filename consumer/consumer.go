@@ -9,7 +9,7 @@ import (
     "github.com/confluentinc/confluent-kafka-go/kafka"
 )
 
-var consumer *kafka.Consumer
+var c *kafka.Consumer
 
 func InitKafka() error {
     broker := os.Getenv("BROKERS") // localhost:29092
@@ -17,7 +17,7 @@ func InitKafka() error {
     group := os.Getenv("GROUP") // myGroup
 
     var err error
-    c, err := kafka.NewConsumer(&kafka.ConfigMap{
+    c, err = kafka.NewConsumer(&kafka.ConfigMap{
         "bootstrap.servers":  broker,
         "group.id":           group,
         "session.timeout.ms": 6000,
