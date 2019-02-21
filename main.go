@@ -7,7 +7,7 @@ import (
     "fmt"
     "os"
     "os/signal"
-    // "time"
+    "time"
 
     "github.com/confluentinc/confluent-kafka-go/kafka"
 )
@@ -43,6 +43,61 @@ func main() {
     signal.Notify(signals, os.Interrupt)
 
     topic := "test.D"
+
+    // Producer
+    p, err := kafka.NewProducer(&kafka.ConfigMap{"bootstrap.servers": *bootstrapServers})
+    if err != nil {
+        panic(err)
+    }
+
+    // 送信結果
+    go func() {
+        for e := range p.Events() {
+            switch ev := e.(type) {
+            case *kafka.Message:
+                if ev.TopicPartition.Error == nil {
+                    fmt.Printf("success send. msg: %s\n", string(ev.Value))
+                } else {
+                    fmt.Printf("fail send. reason: %s\n", ev.TopicPartition.Error.Error())
+                }
+            }
+        }
+    }()
+
+    // 送信
+    go func() {
+        defer p.Flush(15 * 1000)
+
+    PRODUCER_FOR:
+        for {
+            select {
+            case <-ctx.Done():
+                break PRODUCER_FOR
+            default:
+                timestamp := time.Now().UnixNano()
+
+                send := &SendMessage{
+                    Message:   "Hello",
+                    Timestamp: timestamp,
+                }
+
+                jsBytes, err := json.Marshal(send)
+                if err != nil {
+                    panic(err)
+                }
+
+                p.Produce(&kafka.Message{
+                    TopicPartition: kafka.TopicPartition{
+                        Topic:     &topic,
+                        Partition: kafka.PartitionAny,
+                    },
+                    Value: jsBytes,
+                }, nil)
+
+                time.Sleep(10000 * time.Millisecond)
+            }
+        }
+    }()
 
     // Consumer
     c, err := kafka.NewConsumer(&kafka.ConfigMap{
