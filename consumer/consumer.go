@@ -30,7 +30,7 @@ func Consume(topic string) {
     sigchan := make(chan os.Signal, 1)
     signal.Notify(sigchan, syscall.SIGINT, syscall.SIGTERM)
 
-    err := c.SubscribeTopics([]string{"heroku_logs", "^aRegex.*[Tt]opic"}, nil)
+    err := c.SubscribeTopics([]string{topic, "^aRegex.*[Tt]opic"}, nil)
     if err != nil {
         fmt.Println("Unable to subscribe to topic " + topic + " due to error - " + err.Error())
         os.Exit(1)
@@ -38,12 +38,34 @@ func Consume(topic string) {
         fmt.Println("subscribed to topic :", topic)
     }
 
-    msg, err := c.ReadMessage(-1)
-    if err == nil {
-        fmt.Printf("Message on %s: %s\n", msg.TopicPartition, string(msg.Value))
-    } else {
-        fmt.Printf("Consumer error: %v (%v)\n", err, msg)
-    }
+    go func() {
+        defer c.Close()
+
+    CONSUMER_FOR:
+        for {
+            select {
+            case <-ctx.Done():
+                break CONSUMER_FOR
+            default:
+                msg, err := c.ReadMessage(-1)
+                if err == nil {
+                    var consumed ConsumedMessage
+                    if err := json.Unmarshal(msg.Value, &consumed); err != nil {
+                        fmt.Println(err)
+                    }
+                    fmt.Printf("success consume. message: %s, timestamp: %d\n", consumed.Message, consumed.Timestamp)
+                } else {
+                    fmt.Printf("fail consume. reason: %s\n", err.Error())
+                }
+            }
+        }
+    }()
+
+    fmt.Println("confluent-kafka-go-example start.")
+
+    <-signals
+
+
     // run := true
 
     // for run == true {
