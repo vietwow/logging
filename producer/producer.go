@@ -40,8 +40,7 @@ func Produce(topics string, message string) {
 		}
 	}()
 
-	value := "Hello Go!"
-	p.ProduceChannel() <- &kafka.Message{TopicPartition: kafka.TopicPartition{Topic: &topics, Partition: kafka.PartitionAny}, Value: []byte(value)}
+	p.ProduceChannel() <- &kafka.Message{TopicPartition: kafka.TopicPartition{Topic: &topics, Partition: kafka.PartitionAny}, Value: []byte(message)}
 
 	// wait for delivery report goroutine to finish
 	_ = <-doneChan

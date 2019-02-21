@@ -23,12 +23,5 @@ func main() {
 
     message := "Hello Go!"
 
-    producerErr := producer.Produce(topic, message)
-    if producerErr != nil {
-        log.Print(err)
-    } else {
-        messageResponse := fmt.Sprintf("Produced [%s] successfully", message)
-        fmt.Println(messageResponse)
-    }
-
+    producer.Produce(topic, message)
 }
