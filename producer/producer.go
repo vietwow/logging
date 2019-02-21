@@ -47,5 +47,4 @@ func Produce(topics string, message string) {
 	_ = <-doneChan
 
 	p.Close()
-
 }
