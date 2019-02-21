@@ -2,8 +2,9 @@ package main
 
 import (
     "fmt"
-
     "github.com/confluentinc/confluent-kafka-go/kafka"
+    "github.com/vietwow/logging/producer"
+    "github.com/vietwow/logging/consumer"
 )
 
 func main() {
