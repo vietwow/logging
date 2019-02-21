@@ -14,7 +14,7 @@ var c *kafka.Consumer
 topic := os.Getenv("TOPIC") // heroku_logs
 
 func InitKafka() error {
-    broker := os.Getenv("BROKERS") // localhost:29092
+    // broker := os.Getenv("BROKERS") // localhost:29092
     group := os.Getenv("GROUP") // myGroup
 
     var err error
