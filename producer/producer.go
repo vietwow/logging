@@ -14,7 +14,7 @@ func InitKafka() error {
     topic := os.Getenv("TOPIC") // heroku_logs
 
     var err error
-    p, err = kafka.NewProducer(&kafka.ConfigMap{"bootstrap.servers": brokers})
+    p, err := kafka.NewProducer(&kafka.ConfigMap{"bootstrap.servers": brokers})
     return err
 }
 
