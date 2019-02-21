@@ -30,6 +30,12 @@ func Consume(topics string, message string) {
     signal.Notify(sigchan, syscall.SIGINT, syscall.SIGTERM)
 
     err := c.SubscribeTopics(strings.Fields(topics), nil)
+    if err != nil {
+        fmt.Println("Unable to subscribe to topic " + kafkaTopic + " due to error - " + subscriptionErr.Error())
+        os.Exit(1)
+    } else {
+        fmt.Println("subscribed to topic ", kafkaTopic)
+    }
 
     run := true
 
