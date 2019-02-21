@@ -39,15 +39,15 @@ func NewSumoLogic(url string, host string, name string, category string, expVers
 
 //FormatEvents
 //Format SlowLog Interface to flat string
-func (s *SumoLogic) FormatEvents(slowLog slowlog.SlowLogData) string {
-	var msg []byte
-	sumologicMessage, err := json.Marshal(slowLog)
-	if err == nil {
-		msg = sumologicMessage
-	}
-	return string(msg)
+// func (s *SumoLogic) FormatEvents(slowLog slowlog.SlowLogData) string {
+// 	var msg []byte
+// 	sumologicMessage, err := json.Marshal(slowLog)
+// 	if err == nil {
+// 		msg = sumologicMessage
+// 	}
+// 	return string(msg)
 
-}
+// }
 
 func (s *SumoLogic) SendLogs(logStringToSend string) {
 	logging.Trace.Println("Attempting to send to Sumo Endpoint: " + s.sumoURL)
