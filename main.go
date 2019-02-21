@@ -6,7 +6,6 @@ import (
     // "github.com/vietwow/logging/consumer"
     "github.com/vietwow/logging/producer"
     "log"
-    "encoding/json"
     // "strings"
 )
 
@@ -28,7 +27,7 @@ func main() {
     if producerErr != nil {
         log.Print(err)
     } else {
-        messageResponse := fmt.Sprintf("Produced [%s] successfully", string(messageJson))
+        messageResponse := fmt.Sprintf("Produced [%s] successfully", message)
         fmt.Println(messageResponse)
     }
 
