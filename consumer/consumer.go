@@ -5,7 +5,7 @@ import (
     "os"
     "os/signal"
     // "strings"
-    "context"
+    // "context"
     "github.com/confluentinc/confluent-kafka-go/kafka"
 )
 
@@ -42,57 +42,34 @@ func Consume(topic string) {
         fmt.Println("subscribed to topic :", topic)
     }
 
-    go func() {
-        defer c.Close()
+    run := true
 
-    CONSUMER_FOR:
-        for {
-            select {
-            case <-ctx.Done():
-                break CONSUMER_FOR
-            default:
-                msg, err := c.ReadMessage(-1)
-                if err == nil {
-                    fmt.Printf("Message on %s: %s\n", msg.TopicPartition, string(msg.Value))
-                } else {
-                    fmt.Printf("fail consume. reason: %s\n", err.Error())
+    for run == true {
+        select {
+        case sig := <-sigchan:
+            fmt.Printf("Caught signal %v: terminating\n", sig)
+            run = false
+        default:
+            ev := c.Poll(100)
+            if ev == nil {
+                continue
+            }
+
+            switch e := ev.(type) {
+            case *kafka.Message:
+                fmt.Printf("%% Message on %s:\n%s\n",
+                    e.TopicPartition, string(e.Value))
+                if e.Headers != nil {
+                    fmt.Printf("%% Headers: %v\n", e.Headers)
                 }
+            case kafka.Error:
+                // Errors should generally be considered as informational, the client will try to automatically recover
+                fmt.Fprintf(os.Stderr, "%% Error: %v\n", e)
+            default:
+                fmt.Printf("Ignored %v\n", e)
             }
         }
-    }()
-
-    fmt.Println("confluent-kafka-go-example start.")
-
-    <-signals
-
-
-    // run := true
-
-    // for run == true {
-    //     select {
-    //     case sig := <-sigchan:
-    //         fmt.Printf("Caught signal %v: terminating\n", sig)
-    //         run = false
-
-    //     case ev := <-c.Events():
-    //         switch e := ev.(type) {
-    //         case kafka.AssignedPartitions:
-    //             fmt.Fprintf(os.Stderr, "%% %v\n", e)
-    //             c.Assign(e.Partitions)
-    //         case kafka.RevokedPartitions:
-    //             fmt.Fprintf(os.Stderr, "%% %v\n", e)
-    //             c.Unassign()
-    //         case *kafka.Message:
-    //             fmt.Printf("%% Message on %s:\n%s\n",
-    //                 e.TopicPartition, string(e.Value))
-    //         case kafka.PartitionEOF:
-    //             fmt.Printf("%% Reached %v\n", e)
-    //         case kafka.Error:
-    //             // Errors should generally be considered as informational, the client will try to automatically recover
-    //             fmt.Fprintf(os.Stderr, "%% Error: %v\n", e)
-    //         }
-    //     }
-    // }
+    }
 
     fmt.Printf("Closing consumer\n")
     c.Close()
