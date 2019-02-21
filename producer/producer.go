@@ -2,7 +2,6 @@ package producer
 
 import (
     "fmt"
-    "os"
 
     "github.com/confluentinc/confluent-kafka-go/kafka"
 )

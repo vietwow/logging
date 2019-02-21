@@ -20,6 +20,8 @@ ADD . /go/src/logging
 
 RUN glide install && go install logging
 
+RUN ls -al /go/bin/
+
 # final stage
 FROM ubuntu
 
