@@ -13,16 +13,12 @@ RUN make
 
 RUN make install
 
-WORKDIR /app
+RUN curl https://glide.sh/get | sh
 
-COPY go.mod .
-COPY go.sum .
+WORKDIR /go/src/logging
+ADD . /go/src/logging
 
-RUN go mod download
-
-COPY . .
-
-RUN go build -o main
+RUN glide install && go install logging
 
 # final stage
 FROM ubuntu

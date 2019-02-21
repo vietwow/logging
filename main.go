@@ -6,6 +6,8 @@ import (
     "os"
     "os/signal"
     "syscall"
+    "strings"
+    "github.com/vietwow/logging/consumer"
 )
 
 func main() {
@@ -38,7 +40,7 @@ func main() {
 
     fmt.Printf("Created Consumer %v\n", c)
 
-    err = c.SubscribeTopics(topic, nil)
+    err = c.SubscribeTopics(strings.Fields(topic), nil)
 
     run := true
 
