@@ -3,9 +3,10 @@ package main
 import (
     "fmt"
     "os"
-    "github.com/confluentinc/confluent-kafka-go/kafka"
     "github.com/vietwow/logging/consumer"
     "github.com/vietwow/logging/producer"
+    "log"
+    "string"
 )
 
 func main() {
@@ -14,7 +15,7 @@ func main() {
     group := os.Getenv("GROUP") // myGroup
 
     // Initialize kafka producer
-    err = producer.InitKafka()
+    err := producer.InitKafka()
     if err != nil {
         fmt.Printf("Failed to create producer: %s\n", err)
         os.Exit(1)
