@@ -5,14 +5,13 @@ import (
     "os"
     "os/signal"
     "syscall"
-    "strings"
     "github.com/confluentinc/confluent-kafka-go/kafka"
 )
 
 var c *kafka.Consumer
 
 func InitKafka() error {
-    // broker := os.Getenv("BROKERS") // localhost:29092
+    broker := os.Getenv("BROKERS") // localhost:29092
     group := os.Getenv("GROUP") // myGroup
 
     var err error
@@ -29,7 +28,7 @@ func Consume(topics string, message string) error {
     sigchan := make(chan os.Signal, 1)
     signal.Notify(sigchan, syscall.SIGINT, syscall.SIGTERM)
 
-    err := c.SubscribeTopics(topics, nil)
+    err := c.SubscribeTopics(strings.Fields(topics), nil)
 
     run := true
 
@@ -62,4 +61,6 @@ func Consume(topics string, message string) error {
 
     fmt.Printf("Closing consumer\n")
     c.Close()
+
+    return err
 }

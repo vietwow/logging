@@ -47,4 +47,6 @@ func Produce(topics string, message string) error {
 	_ = <-doneChan
 
 	p.Close()
+
+	return err
 }
