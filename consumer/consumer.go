@@ -5,7 +5,7 @@ import (
     "os"
     "os/signal"
     "syscall"
-    // "strings"
+    "strings"
     "github.com/confluentinc/confluent-kafka-go/kafka"
 )
 
@@ -31,7 +31,7 @@ func Consume(topic string) {
     sigchan := make(chan os.Signal, 1)
     signal.Notify(sigchan, syscall.SIGINT, syscall.SIGTERM)
 
-    err := c.SubscribeTopics([]string{"foo", "^aRegex.*[Tt]opic"}, nil)
+    err := c.SubscribeTopics(strings.Fields(topic), nil)
     if err != nil {
         fmt.Println("Unable to subscribe to topic " + topic + " due to error - " + err.Error())
         os.Exit(1)
