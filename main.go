@@ -4,7 +4,6 @@ import (
     "fmt"
     "os"
     "github.com/vietwow/logging/consumer"
-    "github.com/vietwow/logging/producer"
 )
 
 func main() {
