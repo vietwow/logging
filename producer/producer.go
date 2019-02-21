@@ -9,9 +9,10 @@ import (
 
 var p *kafka.Producer
 
+topic := os.Getenv("TOPIC") // heroku_logs
+
 func InitKafka() error {
     brokers := os.Getenv("BROKERS") // localhost:29092
-    topic := os.Getenv("TOPIC") // heroku_logs
 
     var err error
     p, err = kafka.NewProducer(&kafka.ConfigMap{"bootstrap.servers": brokers})

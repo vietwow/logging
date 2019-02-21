@@ -11,9 +11,10 @@ import (
 
 var c *kafka.Consumer
 
+topic := os.Getenv("TOPIC") // heroku_logs
+
 func InitKafka() error {
     broker := os.Getenv("BROKERS") // localhost:29092
-    topic := os.Getenv("TOPIC") // heroku_logs
     group := os.Getenv("GROUP") // myGroup
 
     var err error
