@@ -9,7 +9,7 @@ import (
 
 func main() {
     topic := os.Getenv("TOPIC") // heroku_logs
-    broker := os.Getenv("BROKERS") // localhost:29092
+    broker := os.Getenv("BROKER") // localhost:29092
 
     // Initialize kafka producer
     err := producer.InitKafka(broker)
