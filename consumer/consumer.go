@@ -18,10 +18,15 @@ func InitKafka(broker string) error {
 
     var err error
     c, err = kafka.NewConsumer(&kafka.ConfigMap{
-        "bootstrap.servers":  broker,
-        "group.id":           group,
-        "session.timeout.ms": 6000,
-        "auto.offset.reset":  "earliest"})
+        "bootstrap.servers":               broker,
+        "group.id":                        group,
+        "session.timeout.ms":              6000,
+        "go.events.channel.enable":        true,
+        "go.application.rebalance.enable": true,
+        // Enable generation of PartitionEOF when the
+        // end of a partition is reached.
+        "enable.partition.eof": true,
+        "auto.offset.reset":    "earliest"})
 
     return err
 }
