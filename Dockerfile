@@ -20,13 +20,11 @@ ADD . /go/src/logging
 
 RUN glide install && go install logging
 
-RUN ls -al /go/bin/
-
 # final stage
 FROM ubuntu
 
 COPY --from=builder /usr/lib/pkgconfig /usr/lib/pkgconfig
 COPY --from=builder /usr/lib/librdkafka* /usr/lib/
-COPY --from=builder /app/main main
+COPY --from=builder /go/bin/logging logging
 
-CMD ["./main"]
+CMD ["./logging"]
