@@ -141,3 +141,4 @@ func main() {
     <-signals
 
     fmt.Println("confluent-kafka-go-example stop.")
+}
