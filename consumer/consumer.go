@@ -14,6 +14,8 @@ var c *kafka.Consumer
 func InitKafka(broker string) error {
     group := os.Getenv("GROUP") // myGroup
 
+    fmt.Println("Connecting to broker ", broker)
+
     var err error
     c, err = kafka.NewConsumer(&kafka.ConfigMap{
         "bootstrap.servers":  broker,

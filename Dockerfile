@@ -23,6 +23,8 @@ RUN glide install && go install logging
 # final stage
 FROM ubuntu
 
+RUN apt-get update && apt-get install -y telnet curl
+
 COPY --from=builder /usr/lib/pkgconfig /usr/lib/pkgconfig
 COPY --from=builder /usr/lib/librdkafka* /usr/lib/
 COPY --from=builder /go/bin/logging logging
