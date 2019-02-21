@@ -11,7 +11,7 @@ func main() {
     broker := os.Getenv("BROKER") // localhost:29092
 
     // Initialize kafka consumer
-    err = consumer.InitKafka(broker)
+    err := consumer.InitKafka(broker)
     if err != nil {
         fmt.Printf("Failed to create consumer: %s\n", err)
         os.Exit(1)
