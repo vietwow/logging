@@ -31,10 +31,10 @@ func Consume(topics string, message string) {
 
     err := c.SubscribeTopics(strings.Fields(topics), nil)
     if err != nil {
-        fmt.Println("Unable to subscribe to topic " + kafkaTopic + " due to error - " + subscriptionErr.Error())
+        fmt.Println("Unable to subscribe to topic " + topics + " due to error - " + err.Error())
         os.Exit(1)
     } else {
-        fmt.Println("subscribed to topic ", kafkaTopic)
+        fmt.Println("subscribed to topic ", topics)
     }
 
     run := true
