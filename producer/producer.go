@@ -41,7 +41,7 @@ func Produce(topics string, message string) error {
 	}()
 
 	value := "Hello Go!"
-	p.ProduceChannel() <- &kafka.Message{TopicPartition: kafka.TopicPartition{Topic: &topic, Partition: kafka.PartitionAny}, Value: []byte(value)}
+	p.ProduceChannel() <- &kafka.Message{TopicPartition: kafka.TopicPartition{Topic: &topics, Partition: kafka.PartitionAny}, Value: []byte(value)}
 
 	// wait for delivery report goroutine to finish
 	_ = <-doneChan

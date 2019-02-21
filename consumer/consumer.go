@@ -29,7 +29,7 @@ func Consume(topics string, message string) error {
     sigchan := make(chan os.Signal, 1)
     signal.Notify(sigchan, syscall.SIGINT, syscall.SIGTERM)
 
-    err := c.SubscribeTopics(strings.Fields(topic), nil)
+    err := c.SubscribeTopics(topics, nil)
 
     run := true
 
