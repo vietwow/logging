@@ -7,7 +7,7 @@ import (
     "fmt"
     "os"
     "os/signal"
-    "time"
+    // "time"
 
     "github.com/confluentinc/confluent-kafka-go/kafka"
 )
