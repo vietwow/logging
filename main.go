@@ -11,7 +11,7 @@ import (
 func main() {
     // brokers := os.Getenv("BROKERS") // localhost:29092
     topic := os.Getenv("TOPIC") // heroku_logs
-    group := os.Getenv("GROUP") // myGroup
+    // group := os.Getenv("GROUP") // myGroup
 
     // Initialize kafka producer
     err := producer.InitKafka()
