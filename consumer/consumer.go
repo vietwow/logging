@@ -38,34 +38,6 @@ func Consume(topic string) {
         fmt.Println("subscribed to topic :", topic)
     }
 
-    run := true
-
-    for run == true {
-        select {
-        case sig := <-sigchan:
-            fmt.Printf("Caught signal %v: terminating\n", sig)
-            run = false
-
-        case ev := <-c.Events():
-            switch e := ev.(type) {
-            case kafka.AssignedPartitions:
-                fmt.Fprintf(os.Stderr, "%% %v\n", e)
-                c.Assign(e.Partitions)
-            case kafka.RevokedPartitions:
-                fmt.Fprintf(os.Stderr, "%% %v\n", e)
-                c.Unassign()
-            case *kafka.Message:
-                fmt.Printf("%% Message on %s:\n%s\n",
-                    e.TopicPartition, string(e.Value))
-            case kafka.PartitionEOF:
-                fmt.Printf("%% Reached %v\n", e)
-            case kafka.Error:
-                // Errors should generally be considered as informational, the client will try to automatically recover
-                fmt.Fprintf(os.Stderr, "%% Error: %v\n", e)
-            }
-        }
-    }
-
     fmt.Printf("Closing consumer\n")
     c.Close()
 }
