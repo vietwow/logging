@@ -18,10 +18,10 @@ func InitKafka(broker string) error {
 
     var err error
     c, err = kafka.NewConsumer(&kafka.ConfigMap{
-        "bootstrap.servers":               broker,
-        "group.id":                        group,
+        "bootstrap.servers":  broker,
+        "group.id":           group,
         "session.timeout.ms": 6000,
-        "auto.offset.reset":    "earliest"})
+        "auto.offset.reset":  "earliest"})
 
     return err
 }
@@ -31,7 +31,13 @@ func Consume(topic string) {
     sigchan := make(chan os.Signal, 1)
     signal.Notify(sigchan, syscall.SIGINT, syscall.SIGTERM)
 
-    c.SubscribeTopics(strings.Fields(topic), nil)
+    err := c.SubscribeTopics(strings.Fields(topic), nil)
+    if err != nil {
+        fmt.Println("Unable to subscribe to topic " + topic + " due to error - " + err.Error())
+        os.Exit(1)
+    } else {
+        fmt.Println("subscribed to topic ", topic)
+    }
 
     run := true
 
