@@ -31,7 +31,7 @@ func Consume(topic string) {
     sigchan := make(chan os.Signal, 1)
     signal.Notify(sigchan, syscall.SIGINT, syscall.SIGTERM)
 
-    err := c.SubscribeTopics("heroku_logs", nil)
+    err := c.SubscribeTopics([]string{"foo", "^aRegex.*[Tt]opic"}, nil)
     if err != nil {
         fmt.Println("Unable to subscribe to topic " + topic + " due to error - " + err.Error())
         os.Exit(1)
