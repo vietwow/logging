@@ -48,5 +48,5 @@ func Produce(topics string, message string) error {
 
 	p.Close()
 
-	return err
+	return 0
 }
