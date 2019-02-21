@@ -4,7 +4,6 @@ import (
     "fmt"
     "os"
     "os/signal"
-    "syscall"
     // "strings"
     "context"
     "github.com/confluentinc/confluent-kafka-go/kafka"
@@ -54,7 +53,7 @@ func Consume(topic string) {
             default:
                 msg, err := c.ReadMessage(-1)
                 if err == nil {
-                    fmt.Printf("success consume. message: %s, timestamp: %d\n", string(msg))
+                    fmt.Printf("Message on %s: %s\n", msg.TopicPartition, string(msg.Value))
                 } else {
                     fmt.Printf("fail consume. reason: %s\n", err.Error())
                 }
