@@ -6,6 +6,7 @@ import (
     "os/signal"
     "syscall"
     // "strings"
+    "context"
     "github.com/confluentinc/confluent-kafka-go/kafka"
 )
 
@@ -31,8 +32,8 @@ func Consume(topic string) {
     ctx, cancel := context.WithCancel(context.Background())
     defer cancel()
 
-    sigchan := make(chan os.Signal, 1)
-    signal.Notify(sigchan, syscall.SIGINT, syscall.SIGTERM)
+    signals := make(chan os.Signal, 1)
+    signal.Notify(signals, os.Interrupt)
 
     err := c.SubscribeTopics([]string{topic, "^aRegex.*[Tt]opic"}, nil)
     if err != nil {
@@ -53,7 +54,7 @@ func Consume(topic string) {
             default:
                 msg, err := c.ReadMessage(-1)
                 if err == nil {
-                    fmt.Printf("success consume. message: %s, timestamp: %d\n", string(Message))
+                    fmt.Printf("success consume. message: %s, timestamp: %d\n", string(msg))
                 } else {
                     fmt.Printf("fail consume. reason: %s\n", err.Error())
                 }
