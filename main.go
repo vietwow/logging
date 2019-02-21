@@ -5,7 +5,6 @@ import (
     "os"
     // "github.com/vietwow/logging/consumer"
     "github.com/vietwow/logging/producer"
-    "log"
     // "strings"
 )
 
