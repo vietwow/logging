@@ -25,7 +25,7 @@ func InitKafka() error {
     return err
 }
 
-func Consume(topics string, message string) error {
+func Consume(topics string, message string) {
     sigchan := make(chan os.Signal, 1)
     signal.Notify(sigchan, syscall.SIGINT, syscall.SIGTERM)
 
@@ -62,6 +62,4 @@ func Consume(topics string, message string) error {
 
     fmt.Printf("Closing consumer\n")
     c.Close()
-
-    return err
 }

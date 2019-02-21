@@ -17,7 +17,7 @@ func InitKafka() error {
     return err
 }
 
-func Produce(topics string, message string) error {
+func Produce(topics string, message string) {
 	doneChan := make(chan bool)
 
 	go func() {
@@ -48,5 +48,4 @@ func Produce(topics string, message string) error {
 
 	p.Close()
 
-	return m.TopicPartition.Error
 }
