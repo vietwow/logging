@@ -5,7 +5,7 @@ import (
     "os"
     "os/signal"
     "syscall"
-    "strings"
+    // "strings"
     "github.com/confluentinc/confluent-kafka-go/kafka"
 )
 
