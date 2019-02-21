@@ -27,6 +27,10 @@ func InitKafka(broker string) error {
 
 func Consume(topic string) {
     fmt.Printf("=> Created Consumer %v\n", c)
+
+    ctx, cancel := context.WithCancel(context.Background())
+    defer cancel()
+
     sigchan := make(chan os.Signal, 1)
     signal.Notify(sigchan, syscall.SIGINT, syscall.SIGTERM)
 
@@ -49,11 +53,7 @@ func Consume(topic string) {
             default:
                 msg, err := c.ReadMessage(-1)
                 if err == nil {
-                    var consumed ConsumedMessage
-                    if err := json.Unmarshal(msg.Value, &consumed); err != nil {
-                        fmt.Println(err)
-                    }
-                    fmt.Printf("success consume. message: %s, timestamp: %d\n", consumed.Message, consumed.Timestamp)
+                    fmt.Printf("success consume. message: %s, timestamp: %d\n", string(Message))
                 } else {
                     fmt.Printf("fail consume. reason: %s\n", err.Error())
                 }
