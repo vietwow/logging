@@ -10,24 +10,20 @@ import (
 
 var consumer *kafka.Consumer
 
-func InitKafka() error {
+func Consume(topics string, message string) error {
+    sigchan := make(chan os.Signal, 1)
+    signal.Notify(sigchan, syscall.SIGINT, syscall.SIGTERM)
+
     brokers := os.Getenv("BROKERS") // localhost:29092
     topic := os.Getenv("TOPIC") // heroku_logs
     group := os.Getenv("GROUP") // myGroup
 
     var err error
     c, err := kafka.NewConsumer(&kafka.ConfigMap{
-        "bootstrap.servers":  broker,
+        "bootstrap.servers":  brokers,
         "group.id":           group,
         "session.timeout.ms": 6000,
         "auto.offset.reset":  "earliest"})
-
-    return err
-}
-
-func Consume(topics string, message string) error {
-    sigchan := make(chan os.Signal, 1)
-    signal.Notify(sigchan, syscall.SIGINT, syscall.SIGTERM)
 
     err := c.SubscribeTopics(topics, nil)
 

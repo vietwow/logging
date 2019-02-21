@@ -1,21 +1,45 @@
-FROM golang:alpine
+# build stage
+FROM golang as builder 
 
-# Install OS-level dependencies.
-RUN apk update &&     apk add curl git &&     curl https://glide.sh/get | sh
+# librdkafka Build from source
 
-# Copy our source code into the container.
-WORKDIR /go/src/logging
-ADD . /go/src/logging
+RUN git clone https://github.com/edenhill/librdkafka.git
 
-# Install our golang dependencies and compile our binary.
-RUN glide install
-RUN go install logging
+WORKDIR librdkafka
 
-FROM alpine:latest
-RUN apk --no-cache add ca-certificates
+RUN ./configure --prefix /usr
 
-WORKDIR /root/
+RUN make
 
-COPY --from=0 /go/bin/logging .
+RUN make install
 
-CMD ["./logging"]
+# Build go binary 
+
+ENV GO111MODULE=on
+
+WORKDIR /app
+
+COPY go.mod .
+COPY go.sum .
+
+RUN go mod download
+
+COPY . .
+
+RUN go build -o main
+
+# final stage
+FROM ubuntu
+
+COPY --from=builder /usr/lib/pkgconfig /usr/lib/pkgconfig
+COPY --from=builder /usr/lib/librdkafka* /usr/lib/
+COPY --from=builder /app/main main
+
+CMD ["./main"]
+
+
+# to build 
+# docker build -t {{tag_name}} .
+
+# to run 
+# docker run {{tag_name}}
