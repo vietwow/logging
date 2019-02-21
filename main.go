@@ -21,7 +21,7 @@ func main() {
         os.Exit(1)
     }
 
-    message := "test vietwow"
+    message := "Hello Go!"
 
     producerErr := producer.Produce(topic, message)
     if producerErr != nil {
