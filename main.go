@@ -7,6 +7,7 @@ import (
     "github.com/confluentinc/confluent-kafka-go/kafka"
     "time"
     "gopkg.in/alecthomas/kingpin.v2"
+    "github.com/vietwow/logging/sumologic"
 )
 
 var c *kafka.Consumer
@@ -54,7 +55,7 @@ func main() {
     sigchan := make(chan os.Signal, 1)
     signal.Notify(sigchan, os.Interrupt)
 
-    err := c.SubscribeTopics([]string{topic}, nil)
+    err = c.SubscribeTopics([]string{topic}, nil)
     if err != nil {
         fmt.Println("Unable to subscribe to topic " + topic + " due to error - " + err.Error())
         os.Exit(1)
@@ -81,7 +82,7 @@ func main() {
                     e.TopicPartition, string(e.Value))
 
                 // Sent to SumoLogic
-                formated := sClient.FormatEvents(sLog)
+                formated := sClient.FormatEvents(string(e.Value))
                 go sClient.SendLogs(formated)
 
                 if e.Headers != nil {
