@@ -47,5 +47,5 @@ services:
       - kafka
     environment:
       BROKER: kafka:29092
-      TOPIC: devops
+      TOPIC: heroku_logs
       GROUP: myGroup
