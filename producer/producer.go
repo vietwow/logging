@@ -17,7 +17,7 @@ func InitKafka() error {
     return err
 }
 
-func Produce(topics string, message string) error {
+func Produce(topics string, message string) int {
 	doneChan := make(chan bool)
 
 	go func() {
