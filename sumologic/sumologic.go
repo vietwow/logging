@@ -1,6 +1,7 @@
 package sumologic
 
 import (
+	"fmt"
 	"bytes"
 	"compress/gzip"
 	// "encoding/json"
@@ -50,7 +51,8 @@ func NewSumoLogic(url string, host string, name string, category string, expVers
 // }
 
 func (s *SumoLogic) SendLogs(logStringToSend string) {
-	logging.Trace.Println("Attempting to send to Sumo Endpoint: " + s.sumoURL)
+	// logging.Trace.Println("Attempting to send to Sumo Endpoint: " + s.sumoURL)
+	fmt.Println("Attempting to send to Sumo Endpoint: ", s.sumoURL)
 	if logStringToSend != "" {
 		var buf bytes.Buffer
 		g := gzip.NewWriter(&buf)
@@ -58,7 +60,8 @@ func (s *SumoLogic) SendLogs(logStringToSend string) {
 		g.Close()
 		request, err := http.NewRequest("POST", s.sumoURL, &buf)
 		if err != nil {
-			logging.Error.Printf("http.NewRequest() error: %v\n", err)
+			// logging.Error.Printf("http.NewRequest() error: %v\n", err)
+			fmt.Printf("http.NewRequest() error: %v\n", err)
 			return
 		}
 		request.Header.Add("Content-Encoding", "gzip")
