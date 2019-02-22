@@ -49,3 +49,5 @@ services:
       BROKER: kafka:29092
       TOPIC: heroku_logs
       GROUP: myGroup
+      SUMOLOGIC_URL:
+      SUMOLOGIC_CAT:
