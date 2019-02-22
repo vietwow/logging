@@ -52,18 +52,20 @@ func NewSumoLogic(url string, host string, name string, category string, expVers
 
 func (s *SumoLogic) SendLogs(logStringToSend string) {
 	// logging.Trace.Println("Attempting to send to Sumo Endpoint: " + s.sumoURL)
-	fmt.Println("Attempting to send to Sumo Endpoint: ", s.sumoURL)
 	if logStringToSend != "" {
 		var buf bytes.Buffer
 		g := gzip.NewWriter(&buf)
 		g.Write([]byte(logStringToSend))
 		g.Close()
+		fmt.Println("Preparing the request to Sumo Endpoint: ", s.sumoURL)
 		request, err := http.NewRequest("POST", s.sumoURL, &buf)
 		if err != nil {
 			// logging.Error.Printf("http.NewRequest() error: %v\n", err)
 			fmt.Printf("http.NewRequest() error: %v\n", err)
 			return
 		}
+		fmt.Println("=> Done prepare")
+		fmt.Println("=> Done sent request")
 		request.Header.Add("Content-Encoding", "gzip")
 		request.Header.Add("X-Sumo-Client", "redis-forwarder v"+s.forwarderVersion)
 
@@ -81,7 +83,14 @@ func (s *SumoLogic) SendLogs(logStringToSend string) {
 			logging.Trace.Println("Delaying Post because minimum post timer not expired")
 			time.Sleep(100 * time.Millisecond)
 		}
+
+		fmt.Println("Attempting to send to Sumo Endpoint: ", s.sumoURL)
 		response, err := s.httpClient.Do(request)
+		
+		if err == nil
+		    fmt.Println("=> Done sent request. Returned status code is :", response.StatusCode)
+		else
+		    fmt.Println("ERROR: failed to send request. Returned status code is :", response.StatusCode)
 
 		if (err != nil) || (response.StatusCode != 200 && response.StatusCode != 302 && response.StatusCode < 500) {
 			logging.Info.Println("Endpoint dropped the post send")
