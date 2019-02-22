@@ -29,4 +29,4 @@ COPY --from=builder /usr/lib/pkgconfig /usr/lib/pkgconfig
 COPY --from=builder /usr/lib/librdkafka* /usr/lib/
 COPY --from=builder /go/bin/logging logging
 
-CMD ["./logging", "--sumologic.url=https://endpoint3.collection.us2.sumologic.com/receiver/v1/http/ZaVnC4dhaV0cENebVZjeosl4fGY0WEQWVKTN7YBhLa1DL2hPMoeeWUTgwHUSHE6QmLNHdR2kIJhnOEjD-DmoLCyoYS89Co4kW2Q-7Y6wAX1YwYz_s0zOGw==", "--sumologic.source.category=logging"]
+CMD ["./logging", "--sumologic.url=https://endpoint3.collection.us2.sumologic.com/receiver/v1/http/ZaVnC4dhaV3roU3-kIZNtE2iTbUBN9crYJBdOVmhT0KD7_tmOjxO0dRuSn0DmGYcSOznK5nRyCqsaPm69tsW2CVr51cK9ook29GUHCJg8bd1oa1GpZzY7A==", "--sumologic.source.category=staging/logging"]
