@@ -87,12 +87,12 @@ func (s *SumoLogic) SendLogs(logStringToSend string) {
 		fmt.Println("Attempting to send to Sumo Endpoint: ", s.sumoURL)
 		response, err := s.httpClient.Do(request)
 
-		fmt.Println("Returned status code is :", response.StatusCode)
+		// fmt.Println("Returned status code is :", response.StatusCode)
 		// if err != nil {
 		// 	fmt.Println("ERROR: failed to send request. Returned status code is :", response.StatusCode)
 		// }
 
-		// fmt.Println("=> Done sent request. Returned status code is :", response.StatusCode)
+		fmt.Println("=> Done sent request")
 
 		if (err != nil) || (response.StatusCode != 200 && response.StatusCode != 302 && response.StatusCode < 500) {
 			logging.Info.Println("Endpoint dropped the post send")
