@@ -150,11 +150,11 @@ func (s *SumoLogic) SendLogs(logStringToSend string) {
 				// fmt.Printf("http.Do() error: %v\n", err)
 				return
 			} else if statusCode != 200 {
-				logging.Error.Printf("Not able to post after retry, with status code: %d", statusCode)
-				// fmt.Printf("Not able to post after retry, with status code: %d", statusCode)
+				// logging.Error.Printf("Not able to post after retry, with status code: %d", statusCode)
+				fmt.Printf("Not able to post after retry, with status code: %d", statusCode)
 			}
 		} else if response.StatusCode == 200 {
-			logging.Trace.Println("Post of logs successful")
+			// logging.Trace.Println("Post of logs successful")
 			// fmt.Println("Post of logs successful")
 			s.timerBetweenPost = time.Now()
 		}
