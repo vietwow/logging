@@ -9,7 +9,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/vietwow/kafka-sumo/logging"
+	"github.com/vietwow/my_project/logging"
 )
 
 type SumoLogicEvents struct {

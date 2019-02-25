@@ -7,7 +7,7 @@ import (
     "github.com/confluentinc/confluent-kafka-go/kafka"
     "time"
     "gopkg.in/alecthomas/kingpin.v2"
-    "github.com/vietwow/kafka-sumo/sumologic"
+    "github.com/vietwow/my_project/sumologic"
 )
 
 var c *kafka.Consumer
