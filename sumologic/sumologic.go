@@ -51,13 +51,11 @@ func NewSumoLogic(url string, host string, name string, category string, expVers
 // }
 
 func (s *SumoLogic) SendLogs(logStringToSend string) {
-	// logging.Trace.Println("Attempting to send to Sumo Endpoint: " + s.sumoURL)
 	if logStringToSend != "" {
 		var buf bytes.Buffer
 		g := gzip.NewWriter(&buf)
 		g.Write([]byte(logStringToSend))
 		g.Close()
-		fmt.Println("Preparing the request to Sumo Endpoint: ", s.sumoURL)
 		request, err := http.NewRequest("POST", s.sumoURL, &buf)
 		if err != nil {
 			// logging.Error.Printf("http.NewRequest() error: %v\n", err)
@@ -84,22 +82,22 @@ func (s *SumoLogic) SendLogs(logStringToSend string) {
 			time.Sleep(100 * time.Millisecond)
 		}
 
-		fmt.Println("Attempting to send to Sumo Endpoint: ", s.sumoURL)
+		// fmt.Println("Attempting to send to Sumo Endpoint: ", s.sumoURL)
 		response, err := s.httpClient.Do(request)
 
 		if (err != nil) || (response.StatusCode != 200 && response.StatusCode != 302 && response.StatusCode < 500) {
-			// logging.Info.Println("Endpoint dropped the post send")
-			// logging.Info.Println("Waiting for 300 ms to retry")
-			fmt.Println("Endpoint dropped the post send")
-			fmt.Println("Waiting for 300 ms to retry")
+			logging.Info.Println("Endpoint dropped the post send")
+			logging.Info.Println("Waiting for 300 ms to retry")
+			// fmt.Println("Endpoint dropped the post send")
+			// fmt.Println("Waiting for 300 ms to retry")
 			time.Sleep(300 * time.Millisecond)
 			statusCode := 0
 			err := Retry(func(attempt int) (bool, error) {
 				var errRetry error
 				request, err := http.NewRequest("POST", s.sumoURL, &buf)
 				if err != nil {
-					// logging.Error.Printf("http.NewRequest() error: %v\n", err)
-					fmt.Printf("http.NewRequest() error: %v\n", err)
+					logging.Error.Printf("http.NewRequest() error: %v\n", err)
+					// fmt.Printf("http.NewRequest() error: %v\n", err)
 				}
 				request.Header.Add("Content-Encoding", "gzip")
 				request.Header.Add("X-Sumo-Client", "redis-forwarder v"+s.forwarderVersion)
@@ -146,18 +144,18 @@ func (s *SumoLogic) SendLogs(logStringToSend string) {
 				return attempt < 5, errRetry
 			})
 			if err != nil {
-				// logging.Error.Println("Error, Not able to post after retry")
-				// logging.Error.Printf("http.Do() error: %v\n", err)
-				fmt.Println("Error, Not able to post after retry")
-				fmt.Printf("http.Do() error: %v\n", err)
+				logging.Error.Println("Error, Not able to post after retry")
+				logging.Error.Printf("http.Do() error: %v\n", err)
+				// fmt.Println("Error, Not able to post after retry")
+				// fmt.Printf("http.Do() error: %v\n", err)
 				return
 			} else if statusCode != 200 {
-				// logging.Error.Printf("Not able to post after retry, with status code: %d", statusCode)
-				fmt.Printf("Not able to post after retry, with status code: %d", statusCode)
+				logging.Error.Printf("Not able to post after retry, with status code: %d", statusCode)
+				// fmt.Printf("Not able to post after retry, with status code: %d", statusCode)
 			}
 		} else if response.StatusCode == 200 {
-			// logging.Trace.Println("Post of logs successful")
-			fmt.Println("Post of logs successful")
+			logging.Trace.Println("Post of logs successful")
+			// fmt.Println("Post of logs successful")
 			s.timerBetweenPost = time.Now()
 		}
 
