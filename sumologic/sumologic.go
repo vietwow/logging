@@ -58,11 +58,10 @@ func (s *SumoLogic) SendLogs(logStringToSend string) {
 		g.Close()
 		request, err := http.NewRequest("POST", s.sumoURL, &buf)
 		if err != nil {
-			// logging.Error.Printf("http.NewRequest() error: %v\n", err)
-			fmt.Printf("http.NewRequest() error: %v\n", err)
+			logging.Error.Printf("http.NewRequest() error: %v\n", err)
+			// fmt.Printf("http.NewRequest() error: %v\n", err)
 			return
 		}
-		fmt.Println("=> Done prepare")
 
 		request.Header.Add("Content-Encoding", "gzip")
 		request.Header.Add("X-Sumo-Client", "redis-forwarder v"+s.forwarderVersion)
@@ -113,24 +112,24 @@ func (s *SumoLogic) SendLogs(logStringToSend string) {
 				}
 				//checking the timer before POST (retry intent)
 				for time.Since(s.timerBetweenPost) < s.sumoPostMinimumDelay {
-					// logging.Trace.Println("Delaying Post because minimum post timer not expired")
-					fmt.Println("Delaying Post because minimum post timer not expired")
+					logging.Trace.Println("Delaying Post because minimum post timer not expired")
+					// fmt.Println("Delaying Post because minimum post timer not expired")
 					time.Sleep(100 * time.Millisecond)
 				}
 				response, errRetry = s.httpClient.Do(request)
 
 				if errRetry != nil {
-					// logging.Error.Printf("http.Do() error: %v\n", errRetry)
-					// logging.Info.Println("Waiting for 300 ms to retry after error")
-					fmt.Printf("http.Do() error: %v\n", errRetry)
-					fmt.Println("Waiting for 300 ms to retry after error")
+					logging.Error.Printf("http.Do() error: %v\n", errRetry)
+					logging.Info.Println("Waiting for 300 ms to retry after error")
+					// fmt.Printf("http.Do() error: %v\n", errRetry)
+					// fmt.Println("Waiting for 300 ms to retry after error")
 					time.Sleep(300 * time.Millisecond)
 					return attempt < 5, errRetry
 				} else if response.StatusCode != 200 && response.StatusCode != 302 && response.StatusCode < 500 {
-					// logging.Info.Println("Endpoint dropped the post send again")
-					// logging.Info.Println("Waiting for 300 ms to retry after a retry ...")
-					fmt.Println("Endpoint dropped the post send again")
-					fmt.Println("Waiting for 300 ms to retry after a retry ...")
+					logging.Info.Println("Endpoint dropped the post send again")
+					logging.Info.Println("Waiting for 300 ms to retry after a retry ...")
+					// fmt.Println("Endpoint dropped the post send again")
+					// fmt.Println("Waiting for 300 ms to retry after a retry ...")
 					statusCode = response.StatusCode
 					time.Sleep(300 * time.Millisecond)
 					return attempt < 5, errRetry
