@@ -92,8 +92,8 @@ func (s *SumoLogic) SendLogs(logStringToSend string) {
 		// 	fmt.Println("ERROR: failed to send request. Returned status code is :", response.StatusCode)
 		// }
 
-		fmt.Printf("%v\n", response.StatusCode)
-		fmt.Println("=> Done sent request")
+		// fmt.Printf("%v\n", response.StatusCode)
+		// fmt.Println("=> Done sent request")
 
 		if (err != nil) || (response.StatusCode != 200 && response.StatusCode != 302 && response.StatusCode < 500) {
 			logging.Info.Println("Endpoint dropped the post send")
@@ -151,8 +151,10 @@ func (s *SumoLogic) SendLogs(logStringToSend string) {
 			} else if statusCode != 200 {
 				logging.Error.Printf("Not able to post after retry, with status code: %d", statusCode)
 			}
-		} else if response.StatusCode == 200 {
-			logging.Trace.Println("Post of logs successful")
+		}
+		else if response.StatusCode == 200 {
+			// logging.Trace.Println("Post of logs successful")
+			fmt.Println("=> Post of logs successful")
 			s.timerBetweenPost = time.Now()
 		}
 
