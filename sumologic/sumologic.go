@@ -92,6 +92,7 @@ func (s *SumoLogic) SendLogs(logStringToSend string) {
 		// 	fmt.Println("ERROR: failed to send request. Returned status code is :", response.StatusCode)
 		// }
 
+		fmt.Printf("%v\n", response.StatusCode)
 		fmt.Println("=> Done sent request")
 
 		if (err != nil) || (response.StatusCode != 200 && response.StatusCode != 302 && response.StatusCode < 500) {
